@@ -2,9 +2,9 @@
 In order to implement the unit testing with cxxtest, run the following command in your project directory
 
 ```bash
-cxxtestgen --error-printer -o runner YOURTESTFILE.h
+cxxtestgen --error-printer -o runner.cpp YOURTESTFILE.h
 
-g++ -o runner -I$CXXTEST runner.cpp
+g++ -o runner -I$CXXTEST runner.cpp FILEBEINGTESTED.cpp
 ```
 
 the argument runner would be the generated .cpp file to be compiled with the second command
