@@ -56,7 +56,7 @@ double doubleDiv(int a, int b){
  */
 bool even(int a){
 
-  return a % 2 == 0 ? true: false ;
+  return a % 2 == 0;
 }
 
 /*
@@ -65,7 +65,7 @@ bool even(int a){
  */
 bool odd(int a){
 
-  return even(a)? false: true ;
+  return !even(a);
 }
 
 /*
@@ -83,12 +83,18 @@ string concatenate(string s, string t){
  * (Why is it terrible?)
  */
 int* twiddle(int a[], int n){
-  int* temp = new int;
-  for (int i = 0; i< n; i++) {
-    *temp = a[i] + 1;
-    temp++;
+  // int* temp = new int;
+  // for (int i = 0; i< n; i++) {
+  //   *temp = a[i] + 1;
+  //   temp++;
+  // }
+  // temp-=n;
+  // return temp;
+  int b[n];
+  
+  for (int i = 0; i < n; i++){
+    b[i] = a[i] + 1;
   }
-  temp-=n;
-  return temp;
+  return b;
 }
 
