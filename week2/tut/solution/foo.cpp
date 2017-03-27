@@ -83,18 +83,24 @@ string concatenate(string s, string t){
  * (Why is it terrible?)
  */
 int* twiddle(int a[], int n){
-  // int* temp = new int;
-  // for (int i = 0; i< n; i++) {
-  //   *temp = a[i] + 1;
-  //   temp++;
-  // }
-  // temp-=n;
-  // return temp;
-  int b[n];
-  
-  for (int i = 0; i < n; i++){
-    b[i] = a[i] + 1;
+  int* temp = new int;
+  for (int i = 0; i< n; i++) {
+    *temp = a[i] + 1;
+    temp++;
   }
-  return b;
+  temp-=n;
+  return temp;
+
+  // int b[n];
+  
+  // for (int i = 0; i < n; i++){
+  //   b[i] = a[i] + 1;
+  // }
+  // return b;
+
+  // for (int i = 0; i < n; i++) {
+  //   a[i] = a[i]++;
+  // }
+  // return a;
 }
 
