@@ -83,6 +83,8 @@ string concatenate(string s, string t){
  * (Why is it terrible?)
  */
 int* twiddle(int a[], int n){
+  // my solution
+  /*
   int* temp = new int;
   for (int i = 0; i< n; i++) {
     *temp = a[i] + 1;
@@ -90,17 +92,31 @@ int* twiddle(int a[], int n){
   }
   temp-=n;
   return temp;
+  */
 
-  // int b[n];
+  // Luke's solution
+  // you'll probably get this warning:
+  //  warning: address of stack memory associated with local variable
+  //    'b' returned [-Wreturn-stack-address]
+  // because creation of dynamic array is not recommended in c++
+
+  /* 
+  int b[n];
   
-  // for (int i = 0; i < n; i++){
-  //   b[i] = a[i] + 1;
-  // }
-  // return b;
+  for (int i = 0; i < n; i++){
+    b[i] = a[i] + 1;
+  }
+  return b;
+  */
 
-  // for (int i = 0; i < n; i++) {
-  //   a[i] = a[i]++;
-  // }
-  // return a;
+  // Common wrong solution
+  // this is wrong since we are changing the original array 'a' at the same time
+  // since an array is a pointer as well
+  /*
+  for (int i = 0; i < n; i++) {
+    a[i] = a[i] + 1;
+  }
+  return a;
+  */
 }
 
