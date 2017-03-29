@@ -82,17 +82,23 @@ string concatenate(string s, string t){
  * Can you get it to compile without warnings and also not be a terrible piece of code?
  * (Why is it terrible?)
  */
-int* twiddle(int a[], int n){
+int* twiddle(int* a, int n){
   // my solution
-  /*
+   /*
+  // "Arrays are pointer and vice versa (pointer could act like an array)"
+  // the "new" keyword allocate a new memory block to the pointer
   int* temp = new int;
   for (int i = 0; i< n; i++) {
+    // assigning value to memory pointer points to
     *temp = a[i] + 1;
+    // move the pointer to the next memory block with "ptr++" or "ptr = ptr + 1"
     temp++;
   }
+  // move pointer back to the very first element we assigned to (move back n times)
+  // using "ptr-=n" or "ptr = ptr - n";
   temp-=n;
   return temp;
-  */
+   */
 
   // Luke's solution
   // you'll probably get this warning:
