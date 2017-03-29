@@ -1,5 +1,5 @@
-# DSA-tutoring-resources
-this is the repo of my UPASS tutoring class for the following subject
+# DSA-UPASS-resources
+this is the repo of my UPASS (UTS Peer Assisted Study Success) class for the following subject
 
 Univesity of Technology Sydney
 
