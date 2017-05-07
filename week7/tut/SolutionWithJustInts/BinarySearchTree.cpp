@@ -65,33 +65,33 @@ void BinarySearchTree::insert(int v){
 
       if (v < current->value){
 	
-	if (current->left == 0){
-	  current->left = n;
-	  n->parent = current;
-	  placed = true;
+        if (current->left == 0){
+          current->left = n;
+          n->parent = current;
+          placed = true;
 
-	}
-	else{
+        }
+        else{
 
-	  current = current->left;
+          current = current->left;
 
-	}
+        }
 
       }
       else{
 
-	if (current->right == 0){
+        if (current->right == 0){
 
-	  current->right = n;
-	  n->parent = current;
-	  placed = true;
+          current->right = n;
+          n->parent = current;
+          placed = true;
 
-	}
-	else{
+        }
+        else{
 
-	  current = current->right;
-	  
-	}
+          current = current->right;
+          
+        }
 
       }
 
@@ -198,12 +198,12 @@ bool BinarySearchTree::erase(int v){
       BinaryTreeNode * reppar = replacement->parent;
       if (reppar == current){
 
-	reppar->right = replacement->right;
+	      reppar->right = replacement->right;
 
       }
       else {
 
-	reppar->left = replacement->right;
+	      reppar->left = replacement->right;
 
       }
 
