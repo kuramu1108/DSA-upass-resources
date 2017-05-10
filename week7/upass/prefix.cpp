@@ -6,7 +6,7 @@ string prefix(TreeNode* node) {
 }
 
 string ExprTree::prefixOrder(const ExprTree & t){
-   string str = prefix(t.getRoot());
+   string str = prefix(t.root);
    str.pop_back();
    return str;
 }
