@@ -1,5 +1,6 @@
 #include "ExprTree.h"
 #include <sstream>
+#include <iostream>
 
 /*
  * Helper function that tests whether a string is a non-negative integer.
@@ -66,21 +67,38 @@ TreeNode * createOperatorNode(const string & op){
  * Basic constructor that sets up an empty Expr Tree.
  */
 ExprTree::ExprTree(){
-
+  root = 0;
+  _size = 0;
 }
 
 /*
  * Constructor that takes a TreeNode and sets up an ExprTree with that node at the root.
  */
-ExprTree::ExprTree(TreeNode * r){
+int traversal(TreeNode* n) {
+  if (n != 0)
+    return 1 + traversal(n->getLeftChild()) + traversal(n->getRightChild());
+  return 0;
+}
 
+ExprTree::ExprTree(TreeNode * r){
+  root = r;
+  _size = traversal(r);
 }
 
 /*
  * Destructor to clean up the tree.
  */
-ExprTree::~ExprTree(){
 
+void deleteNode(TreeNode* n) {
+  if(n != 0) {
+    deleteNode(n->getLeftChild());
+    deleteNode(n->getRightChild());
+    delete n;
+  } 
+}
+
+ExprTree::~ExprTree(){
+  deleteNode(root);
 }
 
 /*
@@ -89,18 +107,111 @@ ExprTree::~ExprTree(){
  * It returns the broken up expression as a vector of strings.
  */
 vector<string> ExprTree::tokenise(string expression){
+  vector<string> vs;
+  string buffer = "";
 
-  return vector<string>();
-  
+  for (string::iterator it = expression.begin(); it != expression.end(); it++) {
+    char c = *it;
+    if (isdigit(c)) {
+      buffer += c;
+    } else if (c == ' ') {
+      if (buffer != "") {
+        vs.push_back(buffer);
+        buffer = "";
+      }
+      continue;
+    } else {
+      if (buffer != "") {
+        vs.push_back(buffer);
+        buffer = "";
+      }
+      buffer += c;
+      vs.push_back(buffer);
+      buffer = "";
+    }
+  }
+  if (buffer != "")
+    vs.push_back(buffer);
+  return vs;
 }
+
+void rightParenthesis(stack<string>& opstack, vector<string>& postfix) {
+  while (opstack.top() != "(") {
+    postfix.push_back(opstack.top());
+    opstack.pop();
+  }
+  opstack.pop();
+}
+
+void operators(stack<string>& opstack, vector<string>& postfix, string op) {
+  if (op == "+" || op == "-") {
+    if (!opstack.empty()) {
+      while (opstack.top() != "(") {
+        postfix.push_back(opstack.top());
+        opstack.pop();
+        if (opstack.empty()) break;
+      }
+    }
+  } else {
+    while (!opstack.empty()) {
+      postfix.push_back(opstack.top());
+      opstack.pop();
+    }
+  }
+  opstack.push(op);
+}
+
+vector<string> inToPost(vector<string> infix){
+  vector<string> postfix;
+  stack<string> opstack;
+  for (vector<string>::iterator it = infix.begin(); it != infix.end(); it++) {
+    string str = *it;
+    if (is_number(str)) {
+      postfix.push_back(str);
+    } else {
+      if (str == "(") {
+        opstack.push(str);
+      } else if (str == ")") {
+        rightParenthesis(opstack, postfix);
+      } else {
+        operators(opstack, postfix, str);
+      }
+    }
+  }
+  while (!opstack.empty()) {
+    postfix.push_back(opstack.top());
+    opstack.pop();
+  }
+  return postfix;
+} 
 
 /*
  * This function takes a vector of strings representing an expression (as produced
  * by tokenise(string), and builds an ExprTree representing the same expression.
  */
 ExprTree ExprTree::buildTree(vector<string> tokens){
-
-
+  vector<string> postfixToken = inToPost(tokens);
+  stack<TreeNode*> s;
+  for (vector<string>::iterator it = postfixToken.begin(); it != postfixToken.end(); it++) {
+    string str = *it;
+    if (is_number(str)) {
+      TreeNode* num = new TreeNode(to_number(str));
+      s.push(num);
+    } else {
+      TreeNode* right = s.top();
+      s.pop();
+      TreeNode* left = s.top();
+      s.pop();
+      TreeNode* op = createOperatorNode(str);
+      op->setLeftChild(left);
+      left->setParent(op);
+      op->setRightChild(right);
+      right->setParent(op);
+      s.push(op);
+    }
+  }
+  ExprTree tree(s.top());
+  return tree;
 }
 
 /*
@@ -108,8 +219,17 @@ ExprTree ExprTree::buildTree(vector<string> tokens){
  * the value of the expression it represents.
  */
 int ExprTree::evaluate(TreeNode * n){
-
-
+  if (n != 0) {
+    if (n->isValue()) {
+      return n->getValue();
+    } else {
+      if (n->getOperator() == Plus) return evaluate(n->getLeftChild()) + evaluate(n->getRightChild());
+      if (n->getOperator() == Minus) return evaluate(n->getLeftChild()) - evaluate(n->getRightChild());
+      if (n->getOperator() == Times) return evaluate(n->getLeftChild()) * evaluate(n->getRightChild());
+      if (n->getOperator() == Divide) return evaluate(n->getLeftChild()) / evaluate(n->getRightChild());
+    }
+  }
+  return 0;
 }
 
 /*
@@ -117,8 +237,7 @@ int ExprTree::evaluate(TreeNode * n){
  * expression represented by the whole tree.
  */
 int ExprTree::evaluateWholeTree(){
-
-  
+  return evaluate(root);
 }
 
 /*
@@ -126,10 +245,17 @@ int ExprTree::evaluateWholeTree(){
  * that represents that same expression as the tree in
  * prefix notation.
  */
+string prefix(TreeNode* node) {
+  string str = "";
+  if (node != 0)
+    str += node->toString() + " " + prefix(node->getLeftChild()) + prefix(node->getRightChild());
+  return str;
+}
+
 string ExprTree::prefixOrder(const ExprTree & t){
-
-  return "";
-
+  string str = prefix(t.root);
+  str.pop_back();
+  return str;
 }
 
 /*
@@ -137,10 +263,17 @@ string ExprTree::prefixOrder(const ExprTree & t){
  * that represents that same expression as the tree in
  * infix notation.
  */
+string infix(TreeNode* node) {
+  string str = "";
+  if (node != 0)
+    str += infix(node->getLeftChild()) + node->toString() + " " + infix(node->getRightChild());
+  return str;
+}
+
 string ExprTree::infixOrder(const ExprTree & t){
-
-  return "";
-
+  string str = infix(t.root);
+  str.pop_back();
+  return str;
 }
 
 /*
@@ -148,10 +281,17 @@ string ExprTree::infixOrder(const ExprTree & t){
  * that represents that same expression as the tree in
  * postfix notation.
  */
+string postfix(TreeNode* node) {
+  string str = "";
+  if (node != 0)
+    str += postfix(node->getLeftChild()) + postfix(node->getRightChild()) + node->toString() + " ";
+  return str;
+}
+
 string ExprTree::postfixOrder(const ExprTree & t){
-
-  return "";
-
+  string str = postfix(t.root);
+  str.pop_back();
+  return str;
 }
 
 /*
@@ -164,4 +304,4 @@ int ExprTree::size(){ return _size; }
  */
 bool ExprTree::isEmpty(){ return _size == 0; }
 
-TreeNode * ExprTree::getRoot(){ return root; }
+TreeNode * ExprTree::getRoot() { return root; }

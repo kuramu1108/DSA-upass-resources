@@ -64,7 +64,7 @@ public:
     //delete p;
     //delete o;
     //delete t;
-
+    // std::cout << management.score;
   }
 
   void testTokenise(){
@@ -146,7 +146,7 @@ public:
     TS_ASSERT_EQUALS(output[0], expr7);
 
     management.score++;
-
+    // std::cout << management.score << "\n";
   }
 
   void testBuildTreeSingleValue(){
@@ -163,7 +163,7 @@ public:
     TS_ASSERT_EQUALS(t.getRoot()->getValue(), val);
 
     management.score++;    
-
+    // std::cout << "single value " << management.score << "\n";
   }
 
   void testBuildTreeSingleAddition(){
@@ -191,7 +191,7 @@ public:
     TS_ASSERT_EQUALS(t.getRoot()->getRightChild()->getValue(), val2);
 
     management.score += 2;
-
+    // std::cout << "single addition" << management.score << "\n";
   }
 
   void testBuildTreeMultipleAdditionLeftAssociative(){
@@ -243,7 +243,7 @@ public:
     TS_ASSERT_EQUALS(t.getRoot()->getLeftChild()->getLeftChild()->getLeftChild()->getValue(), val1);
 
     management.score += 2;
-
+    // std::cout << "addition left" << management.score << "\n";
   }
 
     void testBuildTreeMultipleAdditionRightAssociative(){
@@ -295,7 +295,7 @@ public:
     TS_ASSERT_EQUALS(t.getRoot()->getRightChild()->getRightChild()->getRightChild()->getValue(), val4);
 
     management.score += 2;
-
+    // std::cout << "addition right" << management.score << "\n";
   }
 
   void testBuildTreeAdditionMultiplication(){
@@ -335,6 +335,7 @@ public:
     TS_ASSERT_EQUALS(t.getRoot()->getRightChild()->getValue(), val3);
 
     management.score += 2;
+    // std::cout << "multiplication" << management.score << "\n";
   }
 
   void testBuildTreeParentheses(){
@@ -378,6 +379,7 @@ public:
     TS_ASSERT_EQUALS(t.getRoot()->getRightChild()->getRightChild()->getValue(), val3);
 
     management.score += 3;
+    // std::cout << "parenthesis" << management.score << "\n";
   }
 
   void testEvaluateValue(){
